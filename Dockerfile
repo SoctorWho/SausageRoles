@@ -1,4 +1,4 @@
-FROM node:15
+FROM bengreenier/docker-xvfb:stable
 
 # Create app directory
 WORKDIR /usr/src/app
