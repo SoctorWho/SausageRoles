@@ -10,6 +10,6 @@ jobs:
       - uses: mr-smithers-excellent/docker-build-push@v5.2
         with:
           registry: ghcr.io
-          image: SoctorWho/SausageRoles
+          image: soctorwho/sausage-roles
           username: Emersont1
           password: ${{ secrets.CONTAINER_REGISTRY }}
