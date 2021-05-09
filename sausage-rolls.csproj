@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="2.3.1" />
+    <PackageReference Include="Imgur.API" Version="5.0.0" />
+    <PackageReference Include="Scottplot" Version="4.0.48" />
   </ItemGroup>
 
 </Project>
