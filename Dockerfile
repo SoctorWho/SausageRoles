@@ -1,18 +1,19 @@
-FROM bengreenier/docker-xvfb:stable
+FROM mcr.microsoft.com/dotnet/sdk:5.0 as build
 
-# Create app directory
-WORKDIR /usr/src/app
+WORKDIR /src
+COPY sausage-rolls.csproj .
+RUN dotnet restore
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
-
-RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
-
-# Bundle app source
 COPY . .
+RUN dotnet publish -c Release -o /out
 
-CMD [ "node", "." ]
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 
+
+RUN apt-get update && apt-get install -y \
+  libgdiplus \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY --from=build /out/ /app
+
+ENTRYPOINT ["dotnet", "/app/sausage-rolls.dll"]
