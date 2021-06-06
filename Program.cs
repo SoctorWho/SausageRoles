@@ -10,7 +10,8 @@ namespace SausageRolls
             string token = Environment.GetEnvironmentVariable("TOKEN");
             string channel = Environment.GetEnvironmentVariable("CHANNEL");
             string imgur = Environment.GetEnvironmentVariable("IMGUR");
-            Bot b = new Bot(token, channel, imgur);
+            string logChannel = Environment.GetEnvironmentVariable("LOG_CHANNEL");
+            Bot b = new Bot(token, channel, imgur, logChannel);
             await b.Run();
         }
     }

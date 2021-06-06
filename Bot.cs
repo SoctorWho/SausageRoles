@@ -24,7 +24,8 @@ namespace SausageRolls
         string[] WantedRoles;
 
         ulong channel;
-        public Bot(string Token, string Channel, string Imgur)
+        ulong logChannel;
+        public Bot(string Token, string Channel, string Imgur, string LogChannel)
         {
             _client = new DiscordSocketClient();
             loginAwaiter = _client.LoginAsync(TokenType.Bot, Token);
@@ -34,13 +35,15 @@ namespace SausageRolls
             WantedRoles = File.ReadAllLines("roles");
 
             channel = Convert.ToUInt64(Channel);
+            logChannel = Convert.ToUInt64(LogChannel);
             apiClient = new ApiClient(Imgur);
         }
 
         private async Task PostGraph(SocketGuildUser a, SocketGuildUser b)
         {
+            var lchan = a.Guild.GetTextChannel(logChannel);
 
-            Console.WriteLine("Update in Server: {0}", a.Guild.Name);
+            await lchan.SendMessageAsync($"Update in Server: {a.Guild.Name}");
             var roles = a.Guild.Roles
                 .Where(r => WantedRoles.Contains(r.Name))
                 .OrderBy(r => Array.IndexOf(WantedRoles, r.Name));
@@ -67,6 +70,7 @@ namespace SausageRolls
                 
                 if (msg.Author.Id == _client.CurrentUser.Id)
                     {
+                        await lchan.SendMessageAsync($"Updating message in <#{channel}>");
                         processed = true;
 
                         await (msg as RestUserMessage).ModifyAsync(x => { x.Content = url; });
@@ -76,6 +80,7 @@ namespace SausageRolls
             }
             if (!processed)
             {
+                await lchan.SendMessageAsync($"Sending message to <#{channel}>");
                 var m = await chan.SendMessageAsync(url);
                 await m.PinAsync();
             }
