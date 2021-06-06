@@ -51,7 +51,7 @@ namespace SausageRolls
             double[] values = roles.Select(r => (double)r.Members.Count()).ToArray();
 
             string file = MakeGraph(labels, values);
-
+            await lchan.SendMessageAsync($"Made Graph");
 
             string url;
             using (var fileStream = File.OpenRead(file))
@@ -61,6 +61,7 @@ namespace SausageRolls
                 var imageUpload = await imageEndpoint.UploadImageAsync(fileStream);
                 url = imageUpload.Link;
             }
+            await lchan.SendMessageAsync($"Uploaded image to {url}");
 
             var chan = a.Guild.GetTextChannel(channel);
             bool processed = false;
