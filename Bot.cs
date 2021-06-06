@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 
 using Discord;
@@ -54,13 +55,11 @@ namespace SausageRolls
             await lchan.SendMessageAsync($"Made Graph");
 
             string url;
-            using (var fileStream = File.OpenRead(file))
-            {
-                var httpClient = new HttpClient();
-                var imageEndpoint = new ImageEndpoint(apiClient, httpClient);
-                var imageUpload = await imageEndpoint.UploadImageAsync(fileStream);
-                url = imageUpload.Link;
-            }
+               using(var wc = new WebClient()){
+                var x = wc.UploadFile("transfer.sh/members.png", "PUT", file);
+                url = Encoding.UTF8.GetString(x);
+               }
+            
             await lchan.SendMessageAsync($"Uploaded image to {url}");
 
             var chan = a.Guild.GetTextChannel(channel);
