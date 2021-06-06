@@ -25,7 +25,7 @@ namespace SausageRolls
 
         ulong channel;
         ulong logChannel;
-        public Bot(string Token, string Channel, string Imgur, string LogChannel)
+        public Bot(string Token, string Channel, string Imgur,string ImgurSecret, string LogChannel)
         {
             _client = new DiscordSocketClient();
             loginAwaiter = _client.LoginAsync(TokenType.Bot, Token);
@@ -36,7 +36,7 @@ namespace SausageRolls
 
             channel = Convert.ToUInt64(Channel);
             logChannel = Convert.ToUInt64(LogChannel);
-            apiClient = new ApiClient(Imgur);
+            apiClient = new ApiClient(Imgur, ImgurSecret);
         }
 
         private async Task PostGraph(SocketGuildUser a, SocketGuildUser b)
